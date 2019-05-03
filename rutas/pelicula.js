@@ -15,23 +15,12 @@ app.post("/", (req, res, next) => {
     let titulo = body.titulo;
     let year = body.year;
 
-    let pelicula = new Pelicula({
-
-    });
 
     request(url + '/?apikey=' + apikey + '&t=' + titulo + '&y=' + year, function(err, rest, body) {
         let json = JSON.parse(body);
         if (rest) {
-            // return res.status(200).json({
-            //     titulo,
-            //     year,
-            //     genenero: json.Genre,
-            //     director: json.Director,
-            //     actor: json.Actors,
-            //     lenguage: json.Language,
-            //     pais: json.Country
-            // });
 
+            // Instanciando una pelicula
             let pelicula = new Pelicula({
                 titulo: titulo,
                 year: Number(year),
@@ -43,9 +32,8 @@ app.post("/", (req, res, next) => {
             });
 
 
-            // ---------
 
-
+            //Guardado de registro en base de datos y devolucion de atributos en JSON
             pelicula.save((err, peliculaSave) => {
                 if (err) {
                     return res.status(400).json({
