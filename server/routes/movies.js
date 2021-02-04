@@ -7,7 +7,7 @@ const request = require('request');
 
 
 
-app.post('/createMovie', async (req, res) => {
+app.post('/createMovieAndList', async (req, res) => {
 
   const title = 'Love';
   const apikey = '5eec5adc';
@@ -42,22 +42,30 @@ app.post('/createMovie', async (req, res) => {
               rated: resp.Rated,
               ratings: resp.Ratings
           });
-          newMovie.save((e, movieSave) =>{
+          newMovie.save((e, newMovieDB) =>{
 
-            if(!movieSave){
+
+            Movie.find({}, async (err, list) => {
+              if(!newMovieDB){
+                return res.status(200).json({
+                  ok: false,
+                  message: 'Erro al crear la película',
+                  error: e.message,
+                  listMovie: list
+                 });
+              }
+  
+  
               return res.status(200).json({
-                ok: false,
-                message: 'Erro al crear la película',
-                error: e.message
+                ok: true,
+                newMovieDB,
+                message: 'Nueva película agregada',
+                listMovie: list
                });
-            }
+  
+            });
 
-
-            return res.status(200).json({
-              ok: true,
-              movieSave
-             });
-
+      
            });
       }
     });
